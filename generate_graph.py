@@ -16,7 +16,7 @@ def generate_graph():
     plt.title('X vs Y')
 
     # Save the plot as an image file
-    plt.savefig('plot.png')  # Save the plot in the static directory
+    plt.savefig('static/plot.png')  # Save the plot in the static directory
 
 # Call generate_graph function when the script is executed
 if __name__ == "__main__":
