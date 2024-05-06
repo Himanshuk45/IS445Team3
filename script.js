@@ -26,7 +26,7 @@ function fetchDataAndDrawChart() {
                 datasets.push(dataset);
             }
             // Draw chart
-            drawChart(['Minor', 'Moderate', 'Major'], datasets);
+            drawChart(['minor', 'moderate', 'major'], datasets);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
