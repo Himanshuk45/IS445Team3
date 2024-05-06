@@ -3,12 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histogram</title>
+    <title>Graph Viewer</title>
 </head>
 <body>
-    <h1>My Histogram 101</h1>
-    <canvas id="histogram" width="400" height="400"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <h1>X vs Y Graph</h1>
+    <div id="graph-container">
+        <img id="graph-image" src="static/plot.png" alt="X vs Y Graph">
+    </div>
+    <button id="refresh-btn">Refresh</button>
+
+    <script>
+        document.getElementById('refresh-btn').addEventListener('click', function() {
+            // Reload the graph image when the refresh button is clicked
+            fetch('/generate-graph')
+                .then(response => response.text())
+                .then(() => {
+                    document.getElementById('graph-image').src = 'static/plot.png?' + new Date().getTime();
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
