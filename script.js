@@ -1,78 +1,44 @@
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('refreshButton').addEventListener('click', fetchDataAndDrawChart);
-    fetchDataAndDrawChart(); // Fetch data and draw chart initially
-});
+// Fetch the CSV file
+fetch('https://water.weather.gov/resources/tmp/long_range_river_flood_risk_data.csv')
+  .then(response => response.text())
+  .then(csvData => {
+    // Parse the CSV data
+    const rows = csvData.split('\n');
+    const headers = rows[0].split(',');
+    const columnIndex = headers.indexOf('minor');
+    const columnData = [];
 
-function fetchDataAndDrawChart() {
-    fetch('https://water.weather.gov/resources/tmp/long_range_river_flood_risk_data.csv')
-        .then(response => response.text())
-        .then(data => {
-            // Parse CSV data
-            const lines = data.split('\n');
-            const labels = lines[0].split(',').slice(1);
-            const datasets = [];
-            // Find indices of "Minor," "Moderate," and "Major" columns
-            const minorIndex = labels.indexOf('minor');
-            const moderateIndex = labels.indexOf('moderate');
-            const majorIndex = labels.indexOf('major');
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').slice(1).map(parseFloat);
-                const dataset = {
-                    label: lines[i].split(',')[0],
-                    data: [values[minorIndex], values[moderateIndex], values[majorIndex]],
-                    borderColor: getRandomColor(),
-                    fill: false
-                };
-                datasets.push(dataset);
-            }
-            // Draw chart
-            drawChart(['minor', 'moderate', 'major'], datasets);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            alert('Failed to fetch data. Please try again.');
-        });
-}
-
-function drawChart(labels, datasets) {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    if (window.myChart !== undefined) {
-        window.myChart.destroy(); // Destroy the previous chart instance
+    // Extract the 'minor' column data
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i].split(',');
+      const value = parseFloat(row[columnIndex]);
+      if (!isNaN(value)) {
+        columnData.push(value);
+      }
     }
-    window.myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Flood Risk Levels Over Time'
-            },
-            scales: {
-                xAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Risk Level'
-                    }
-                }],
-                yAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Places'
-                    }
-                }]
-            }
+
+    // Plot the histogram using Chart.js
+    const ctx = document.getElementById('histogram').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Array.from({ length: columnData.length }, (_, i) => i + 1),
+        datasets: [{
+          label: 'Minor',
+          data: columnData,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Index' } },
+          y: { title: { display: true, text: 'Value' } }
         }
+      }
     });
-}
-
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
+  })
+  .catch(error => {
+    console.error('Error fetching or parsing CSV file:', error);
+  });
