@@ -1,4 +1,3 @@
-// Wrap the code in a function to be called after DOMContentLoaded
 function init() {
     // Fetch the CSV file
     fetch('https://water.weather.gov/resources/tmp/long_range_river_flood_risk_data.csv')
