@@ -1,7 +1,19 @@
 function init() {
-    // Fetch the CSV file
-    fetch('https://water.weather.gov/resources/tmp/long_range_river_flood_risk_data.csv')
-        .then(response => response.text())
+    // URL of the CORS proxy service
+    const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+
+    // URL of the CSV file
+    const csvUrl = 'https://water.weather.gov/resources/tmp/long_range_river_flood_risk_data.csv';
+
+    // Fetch the CSV file via the CORS proxy
+    fetch(corsProxyUrl + csvUrl)
+        .then(response => {
+            // Check if the response is successful
+            if (!response.ok) {
+                throw new Error('Failed to fetch CSV file');
+            }
+            return response.text();
+        })
         .then(csvData => {
             // Parse the CSV data
             const rows = csvData.split('\n');
