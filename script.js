@@ -24,7 +24,10 @@ function fetchDataAndDrawChart() {
             // Draw chart
             drawChart(labels, datasets);
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            alert('Failed to fetch data. Please try again.');
+        });
 }
 
 function drawChart(labels, datasets) {
