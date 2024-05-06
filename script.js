@@ -1,6 +1,6 @@
 function init() {
     // URL of the CORS proxy service
-    const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const corsProxyUrl = 'https://api.allorigins.win/raw?url=';
 
     // URL of the CSV file
     const csvUrl = 'https://water.weather.gov/resources/tmp/long_range_river_flood_risk_data.csv';
