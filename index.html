@@ -8,7 +8,7 @@
 <body>
     <h1>X vs Y Graph</h1>
     <div id="graph-container">
-        <img id="graph-image" src="static/plot.png" alt="X vs Y Graph">
+        <img id="graph-image" src="plot.png" alt="X vs Y Graph">
     </div>
     <button id="refresh-btn">Refresh</button>
 
@@ -18,7 +18,7 @@
             fetch('/generate-graph')
                 .then(response => response.text())
                 .then(() => {
-                    document.getElementById('graph-image').src = 'static/plot.png?' + new Date().getTime();
+                    document.getElementById('graph-image').src = 'plot.png?' + new Date().getTime();
                 })
                 .catch(error => console.error('Error:', error));
         });
