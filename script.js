@@ -11,18 +11,22 @@ function fetchDataAndDrawChart() {
             const lines = data.split('\n');
             const labels = lines[0].split(',').slice(1);
             const datasets = [];
+            // Find indices of "Minor," "Moderate," and "Major" columns
+            const minorIndex = labels.indexOf('minor');
+            const moderateIndex = labels.indexOf('moderate');
+            const majorIndex = labels.indexOf('major');
             for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',').slice(1).map(parseFloat);
                 const dataset = {
                     label: lines[i].split(',')[0],
-                    data: values,
+                    data: [values[minorIndex], values[moderateIndex], values[majorIndex]],
                     borderColor: getRandomColor(),
                     fill: false
                 };
                 datasets.push(dataset);
             }
             // Draw chart
-            drawChart(labels, datasets);
+            drawChart(['Minor', 'Moderate', 'Major'], datasets);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -50,13 +54,13 @@ function drawChart(labels, datasets) {
                 xAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Places'
+                        labelString: 'Risk Level'
                     }
                 }],
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Risk Level'
+                        labelString: 'Places'
                     }
                 }]
             }
